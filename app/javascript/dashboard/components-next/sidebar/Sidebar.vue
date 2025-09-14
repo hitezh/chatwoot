@@ -330,28 +330,28 @@ const menuItems = computed(() => {
         },
       ],
     },
-    {
-      name: 'Campaigns',
-      label: t('SIDEBAR.CAMPAIGNS'),
-      icon: 'i-lucide-megaphone',
-      children: [
-        {
-          name: 'Live chat',
-          label: t('SIDEBAR.LIVE_CHAT'),
-          to: accountScopedRoute('campaigns_livechat_index'),
-        },
-        {
-          name: 'SMS',
-          label: t('SIDEBAR.SMS'),
-          to: accountScopedRoute('campaigns_sms_index'),
-        },
-        {
-          name: 'WhatsApp',
-          label: t('SIDEBAR.WHATSAPP'),
-          to: accountScopedRoute('campaigns_whatsapp_index'),
-        },
-      ],
-    },
+    // {
+    //   name: 'Campaigns',
+    //   label: t('SIDEBAR.CAMPAIGNS'),
+    //   icon: 'i-lucide-megaphone',
+    //   children: [
+    //     {
+    //       name: 'Live chat',
+    //       label: t('SIDEBAR.LIVE_CHAT'),
+    //       to: accountScopedRoute('campaigns_livechat_index'),
+    //     },
+    //     {
+    //       name: 'SMS',
+    //       label: t('SIDEBAR.SMS'),
+    //       to: accountScopedRoute('campaigns_sms_index'),
+    //     },
+    //     {
+    //       name: 'WhatsApp',
+    //       label: t('SIDEBAR.WHATSAPP'),
+    //       to: accountScopedRoute('campaigns_whatsapp_index'),
+    //     },
+    //   ],
+    // },
     {
       name: 'Portals',
       label: t('SIDEBAR.HELP_CENTER.TITLE'),
