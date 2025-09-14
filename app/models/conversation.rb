@@ -50,6 +50,7 @@
 #
 
 class Conversation < ApplicationRecord
+  audited associated_with: :account
   include Labelable
   include LlmFormattable
   include AssignmentHandler
@@ -193,6 +194,57 @@ class Conversation < ApplicationRecord
 
   def dispatch_conversation_updated_event(previous_changes = nil)
     dispatcher_dispatch(CONVERSATION_UPDATED, previous_changes)
+  end
+
+  def activity_log
+    activities = []
+
+    # 1. Conversation created
+    if created_at
+      activities << {
+        message: "Request submitted by #{contact&.name || 'Unknown'}",
+        date: created_at
+      }
+    end
+
+    # 2. Assignment and status changes from audits
+    audits.order(created_at: :asc).each do |audit|
+      user_name = audit.user&.name || 'System'
+
+      # Assignment change
+      if audit.audited_changes['assignee_id']
+        assignee_name = account&.name || " "
+        activities << {
+          message: "Request assigned to #{assignee_name} Servicing team",
+          date: audit.created_at
+        }
+      end
+
+      # Status change
+      if audit.audited_changes['status']
+        status_value = audit.audited_changes['status']
+        to_status = Conversation.statuses.key(status_value.is_a?(Array) ? status_value.last : status_value)
+        status_label =
+          case to_status
+          when 'pending'
+            'Pending'
+          when 'resolved'
+            'Resolved'
+          when 'open'
+            'Open'
+          else
+            to_status&.humanize
+          end
+
+        activities << {
+          message: "Verification and processing #{status_label}",
+          date: audit.created_at
+        }
+      end
+    end
+
+    # Sort by date just in case
+    activities.sort_by { |a| a[:date] }
   end
 
   private
